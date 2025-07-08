@@ -90,6 +90,7 @@ pymango==0.1.1
 pymongo==4.13.2
 pyparsing==3.2.3
 python-dateutil==2.9.0.post0
+python-dotenv==1.1.1
 python-json-logger==3.3.0
 pytz==2025.2
 PyYAML==6.0.2
