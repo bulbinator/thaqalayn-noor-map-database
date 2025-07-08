@@ -30,7 +30,7 @@ for i in tqdm(range(0, len(part_hadith_ids), BATCH_SIZE), desc=f"Fetching batche
     payload = {"hadithId": batch, "searchPhrase": ""}
 
     try:
-        response = requests.post(API_URL, json=payload, timeout=10)
+        response = requests.post(API_URL, json=payload)
         response.raise_for_status()
         data = response.json()
         hadiths = data.get("data") or []
