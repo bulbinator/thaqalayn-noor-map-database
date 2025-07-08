@@ -49,8 +49,12 @@ payload = {
     "searchPhrase": ""
 }
 
+proxies = {
+   'https': 'http://200.25.254.193:54240',
+}
+
 try:
-    response = requests.post(API_URL, json=payload)
+    response = requests.post(API_URL, json=payload, proxies=proxies)
     response.raise_for_status()
     data = response.json()
     print(data)
