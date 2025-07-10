@@ -50,10 +50,10 @@ for hadith, embedding in zip(filtered_hadiths, all_embeddings):
 
 dotenv_path = find_dotenv()
 load_dotenv(dotenv_path)
-DB_PASSWORD = os.getenv("DB_PASSWORD")
+NOOR_DB_PASSWORD = os.getenv("NOOR_DB_PASSWORD")
 
 client = pymongo.MongoClient(
-    f"mongodb+srv://smmaisum:{DB_PASSWORD}"
+    f"mongodb+srv://smmaisum:{NOOR_DB_PASSWORD}"
     "@thaqalayn-noor-map-data.arnvlro.mongodb.net/"
     "?retryWrites=true&w=majority&appName=thaqalayn-noor-map-database"
 )
