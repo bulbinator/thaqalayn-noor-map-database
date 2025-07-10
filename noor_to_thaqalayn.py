@@ -6,9 +6,6 @@ from dotenv import find_dotenv, load_dotenv
 import os
 from BOOK_MAP import BOOK_MAP
 
-# -------------------------
-# ⚙️ Connect to MongoDB
-# -------------------------
 dotenv_path = find_dotenv()
 load_dotenv(dotenv_path)
 THAQ_DB_PASSWORD = os.getenv("THAQ_DB_PASSWORD")
@@ -25,16 +22,13 @@ client = pymongo.MongoClient(
     "?retryWrites=true&w=majority&appName=thaqalayn-noor-map-database"
 )
 noor_db = client['thaqalayn-noor']
-noor_collection = noor_db["data"]       # collection with Noor ahadith + embeddings
+noor_collection = noor_db["data"]
 
-# -------------------------
-# 🔍 Loop and vector search
-# -------------------------
-# Find all Thaqalayn ahadith (you can add filters if you want)
+
 docs = list(thaq_collection.find(
     {}, 
     {"_id": 1, "thaqText": 1, "thaqBookId": 1}
-))  # keep _id so we can update
+))
 
 for doc in tqdm(docs, desc="Matching Thaqalayn hadiths"):
     thaq_id = doc["_id"]
@@ -52,6 +46,7 @@ for doc in tqdm(docs, desc="Matching Thaqalayn hadiths"):
     results = list(noor_collection.aggregate([
         {
             "$search": {
+                "index": "atlasSearch",
                 "compound": {
                     "must": [
                         {   # full-text search in "noorText"
@@ -60,7 +55,7 @@ for doc in tqdm(docs, desc="Matching Thaqalayn hadiths"):
                                 "path": "noorText"
                             }
                         },
-                        {   # filter documents where "noorBookTitle" == title_to_match
+                        {   
                             "text": {
                                 "query": BOOK_MAP.get(book),
                                 "path": "noorBookTitle"
@@ -84,7 +79,7 @@ for doc in tqdm(docs, desc="Matching Thaqalayn hadiths"):
 
 
 
-    # If we got a match, update the original Thaqalayn doc
+    
     if results:
         best_match = results[0]
         thaq_collection.update_one(
