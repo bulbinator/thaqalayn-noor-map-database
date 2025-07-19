@@ -20,7 +20,6 @@ books_to_not_include = ['Kitab-al-Duafa-Ghadairi', 'Mujam-al-Ahadith-al-Mutabara
 book_ids = [book['bookId'] for book in books if book['bookId'] not in books_to_not_include]
 
 all_hadiths = []
-model = SentenceTransformer('all-mpnet-base-v2')
 
 for id in tqdm(book_ids):
     url = f"https://www.thaqalayn-api.net/api/v2/{id}"
